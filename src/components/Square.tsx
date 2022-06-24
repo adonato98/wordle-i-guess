@@ -48,6 +48,7 @@ const StyledSquareValue = styled.p`
   font-weight: bold;
   text-align: center;
   vertical-align: middle;
+  user-select: none;
 `
 
 export default Square
