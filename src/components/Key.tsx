@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { SquareState } from './Square'
 import { LightenDarkenColor } from 'lighten-darken-color'
@@ -12,20 +12,34 @@ type KeyProps = {
 
 const Key: React.FC<KeyProps> = ({ letter, label = undefined, width, state }) => {
   const [shaded, setShaded] = useState<boolean>(false)
+  const keyRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onKeyDown = (e) => e.key === letter && setShaded(true)
     const onKeyUp = (e) => e.key === letter && setShaded(false)
-    document.addEventListener('keydown', onKeyDown)
-    document.addEventListener('keyup', onKeyUp)
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.removeEventListener('keyup', onKeyUp)
+
+    // simulate keyboard behavior on click
+    const onMouseDown = (e) => {
+      keyRef.current &&
+        e.target instanceof Node &&
+        keyRef.current.contains(e.target) &&
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: letter }))
     }
-  }, [])
+    const onMouseUp = () => keyRef.current && document.dispatchEvent(new KeyboardEvent('keyup', { key: letter }))
+
+    const listeners = {
+      keydown: onKeyDown,
+      keyup: onKeyUp,
+      mousedown: onMouseDown,
+      mouseup: onMouseUp
+    }
+
+    Object.entries(listeners).forEach(([evt, handler]) => document.addEventListener(evt, handler))
+    return () => Object.entries(listeners).forEach(([evt, handler]) => document.removeEventListener(evt, handler))
+  }, [letter])
 
   return (
-    <StyledKey state={state} flexWidth={width} shaded={shaded}>
+    <StyledKey ref={keyRef} state={state} flexWidth={width} shaded={shaded}>
       <StyledKeyText>{label || letter.toUpperCase()}</StyledKeyText>
     </StyledKey>
   )
@@ -51,6 +65,7 @@ const StyledKeyText = styled.h1`
   color: white;
   font-family: monospace;
   font-size: 20px;
+  user-select: none;
 `
 
 export default Key
