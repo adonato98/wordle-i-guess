@@ -28,11 +28,27 @@ const Keyboard: React.FC<KeyboardProps> = ({ correctLetters = [], matchedLetters
     <KeyboardContainer>
       {keyLines.map((line, lineIdx) => (
         <KeyLine>
-          {lineIdx === 2 && <Key letter="Backspace" label="⌫" width={`calc(${keyboardWidth} * 0.15)`} />}
+          {lineIdx === 2 && (
+            <Key
+              letter="Backspace"
+              label="⌫"
+              width={`calc(${keyboardWidth} * 0.15)`}
+              customBgColor="#E97451"
+              customFgColor="white"
+            />
+          )}
           {line.map((letter) => (
             <Key letter={letter} width={`calc(${keyboardWidth} * 0.1)`} state={letterToState(letter)} />
           ))}
-          {lineIdx === 2 && <Key letter="Enter" label="⏎" width={`calc(${keyboardWidth} * 0.15)`} />}
+          {lineIdx === 2 && (
+            <Key
+              letter="Enter"
+              label="⏎"
+              width={`calc(${keyboardWidth} * 0.15)`}
+              customBgColor="#A7C7E7"
+              customFgColor="white"
+            />
+          )}
         </KeyLine>
       ))}
     </KeyboardContainer>

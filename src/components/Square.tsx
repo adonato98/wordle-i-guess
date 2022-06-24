@@ -34,11 +34,8 @@ type StyledSquareProps = {
 
 const StyledSquare = styled.div<StyledSquareProps>`
   background-color: ${(props) => props.theme[`${props.state}Square`]};
-  ${(props) =>
-    props.state === 'empty' &&
-    css`
-      outline: 2px solid ${props.theme.bg};
-    `}
+  outline: 2px solid ${(props) => props.theme.bg};
+  color: ${(props) => (props.state === SquareState.empty ? props.theme.bg : 'white')};
   width: 50px;
   height: 50px;
   margin: 5px;
@@ -47,7 +44,6 @@ const StyledSquare = styled.div<StyledSquareProps>`
 
 const StyledSquareValue = styled.p`
   font-size: 30px;
-  color: white;
   margin: auto;
   font-weight: bold;
   text-align: center;

@@ -7,10 +7,12 @@ type KeyProps = {
   letter: string
   label?: string
   state?: SquareState
+  customBgColor?: string
+  customFgColor?: string
   width: string
 }
 
-const Key: React.FC<KeyProps> = ({ letter, label = undefined, width, state }) => {
+const Key: React.FC<KeyProps> = ({ letter, width, label, customBgColor, customFgColor, state = SquareState.empty }) => {
   const [shaded, setShaded] = useState<boolean>(false)
   const keyRef = useRef<HTMLDivElement>(null)
 
@@ -39,30 +41,45 @@ const Key: React.FC<KeyProps> = ({ letter, label = undefined, width, state }) =>
   }, [letter])
 
   return (
-    <StyledKey ref={keyRef} state={state} flexWidth={width} shaded={shaded}>
+    <StyledKey
+      ref={keyRef}
+      state={state}
+      flexWidth={width}
+      shaded={shaded}
+      customBgColor={customBgColor}
+      customFgColor={customFgColor}
+    >
       <StyledKeyText>{label || letter.toUpperCase()}</StyledKeyText>
     </StyledKey>
   )
 }
 
 const StyledKey = styled.div<{
-  state?: SquareState
+  state: SquareState
   flexWidth: string
   shaded: boolean
+  customBgColor?: string
+  customFgColor?: string
 }>`
-  background-color: ${(props) =>
-    LightenDarkenColor(props.theme[`${props.state}Square`] ?? '#a7aaac', props.shaded ? -50 : 0)};
+  background-color: ${(props) => {
+    if (props.shaded && props.state === SquareState.empty && !props.customBgColor) {
+      return '#ccc'
+    } else {
+      return LightenDarkenColor(props.customBgColor ?? props.theme[`${props.state}Square`], props.shaded ? -50 : 0)
+    }
+  }};
   border-radius: 4px;
+  outline: 2px solid ${(props) => props.theme.bg};
   padding: 5px;
   margin: 3px;
   flex: 0 0 ${(props) => props.flexWidth};
   display: flex;
   justify-content: center;
   align-items: center;
+  color: ${(props) => props.customFgColor ?? (props.state === SquareState.empty ? props.theme.bg : 'white')};
 `
 
 const StyledKeyText = styled.h1`
-  color: white;
   font-family: monospace;
   font-size: 20px;
   user-select: none;
