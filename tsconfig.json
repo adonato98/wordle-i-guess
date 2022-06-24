@@ -1,0 +1,29 @@
+{ 
+    "compilerOptions":{ 
+       "target":"es6",
+       "module":"es6",
+       "moduleResolution": "node",
+       "allowSyntheticDefaultImports": true,
+       "esModuleInterop": true,
+       "declaration":false,
+       "noLib":false,
+       "pretty":true,
+       "noImplicitAny":false,
+       "strict": true,
+       "jsx": "react-jsx",
+       "noImplicitReturns":false,
+       "noImplicitUseStrict":false,
+       "outDir":"dist/",
+       "listFiles":false,
+       "noEmitHelpers":true,
+       "resolveJsonModule": true
+    },
+    "include":[ 
+       "src/**/*"
+    ],
+    "exclude":[ 
+       "node_modules",
+       "dist"
+    ],
+    "compileOnSave":false
+ }
